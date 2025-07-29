@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class ShowTextOpenDoor : MonoBehaviour
+public class InteractText : MonoBehaviour
 {
     public TextMeshProUGUI promptText;
     void OnTriggerEnter(Collider other)
