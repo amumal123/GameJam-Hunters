@@ -14,6 +14,8 @@ public class PlayerMovement2 : MonoBehaviour
     {
         playerRigidbody = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+
+        
     }
 
     private void Update()
