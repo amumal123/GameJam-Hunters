@@ -24,16 +24,6 @@ public class PlayerMovement2 : MonoBehaviour
     {
         Move(playerInput.movementInput);
         Rotate(playerInput.lookInput);
-
-        // 키보드 입력 받기
-        float x = Input.GetAxis("Horizontal"); // A, D
-        float z = Input.GetAxis("Vertical");   // W, S
-
-        // 현재 바라보는 방향 기준으로 이동 벡터 계산
-        Vector3 move = transform.right * x + transform.forward * z;
-
-        // 실제로 이동
-        //controller.Move(move * speed * Time.deltaTime);
     }
 
     private void Move(Vector2 movementInput) // movementInput <- w를 누르면 0,1 a를 누르면 -1,0 s를 누르면 0,-1 d를 누르면 1,0
