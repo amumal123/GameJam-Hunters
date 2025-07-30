@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,10 +25,16 @@ public class MonsterCtrl : MonoBehaviour
 
     private NavMeshAgent navMeshAgent;
     private bool hasTarget;
+    //private bool hasSubTarget;
     private float lostTraceTime = 0;
 
     private float patrolDelay = 3f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½ 5ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
     private float patrolTimer = 4.5f;
+
+    // ÆÛÇÃ·º½ÃÆ¼
+    private bool isMovingToCarpet = false;      // ¼Ò¸® À§Ä¡·Î ÀÌµ¿ Áß ¿©ºÎ
+    private Vector3 targetCarpetPos;            // ÀÌµ¿ÇÒ Ä«Æê À§Ä¡
+    private float carpetArriveThreshold = 0.75f; // µµÂø ÆÇÁ¤ ÃÖ¼Ò °Å¸®
 
     private void Awake()
     {
@@ -35,16 +42,72 @@ public class MonsterCtrl : MonoBehaviour
         navMeshAgent.speed = traceSpeed;
 
         hasTarget = false;
+        //hasSubTarget = false;
     }
+
+    //private void Update()
+    //{
+    //    if (hasTarget)
+    //    {
+    //        //hasSubTarget = false;
+    //        isMovingToCarpet = false; // carpet ÃßÀûÀº Ãë¼Ò
+    //        print("Å¸°ÙÀÖÀ½");
+    //        navMeshAgent.SetDestination(target.position);
+
+    //        float currentDistance = Vector3.Distance(transform.position, target.position);
+
+    //        if (currentDistance > viewDistance)
+    //        {
+    //            lostTraceTime += Time.deltaTime;
+    //        }
+    //        else
+    //        {
+    //            lostTraceTime = 0f;
+    //        }
+
+    //        if (lostTraceTime >= 5f)
+    //        {
+    //            hasTarget = false;
+    //            //navMeshAgent.isStopped = true; // ÀÓ½Ã¿ë, ³ªÁß¿¡ ¹Ù²ã¾ßÇØ
+    //        }
+    //    }
+    //    else
+    //    {
+    //        FindTarget();
+    //        if (isMovingToCarpet)
+    //        {
+    //            // ¼Ò¸® ³­ À§Ä¡·Î ÀÌµ¿
+    //            navMeshAgent.SetDestination(targetCarpetPos);
+
+    //            // µµÂø ÆÇÁ¤
+    //            float dist = Vector3.Distance(transform.position, targetCarpetPos);
+    //            if (dist <= carpetArriveThreshold)
+    //            {
+    //                print("Ä«Æê±îÁöÀÌµ¿²ý");
+    //                isMovingToCarpet = false;
+    //                //hasSubTarget = false;
+    //                RandomPatrol(); // ´Ù½Ã ¼øÂû ½ÃÀÛ
+    //            }
+    //        }
+    //        else
+    //        {
+    //            RandomPatrol();
+    //        }
+    //    }
+    //}
 
     private void Update()
     {
+        // Å¸°ÙÀÌ ÀÖ´Ù¸é ¹«Á¶°Ç Ä«Æê ÃßÀûµµ Áß´ÜÇÏ°í Å¸°Ù ÃßÀû ¿ì¼±
         if (hasTarget)
         {
+<<<<<<< Updated upstream
+=======
+            isMovingToCarpet = false; // ¹Ýµå½Ã ¼Ò¸® ÃßÀû Áß´Ü
+>>>>>>> Stashed changes
             navMeshAgent.SetDestination(target.position);
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
-
             if (currentDistance > viewDistance)
             {
                 lostTraceTime += Time.deltaTime;
@@ -53,18 +116,38 @@ public class MonsterCtrl : MonoBehaviour
             {
                 lostTraceTime = 0f;
             }
-
             if (lostTraceTime >= 5f)
             {
                 hasTarget = false;
+<<<<<<< Updated upstream
                 //navMeshAgent.isStopped = true; // ï¿½Ó½Ã¿ï¿½, ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ï¿½
+=======
+>>>>>>> Stashed changes
             }
+            return; // *** hasTargetÀÏ ¶§ ¾Æ·¡ ÄÚµå ½ÇÇà ¸·±â (¸Å¿ì Áß¿ä)
         }
-        else
+
+        // Ç×»ó Å¸°Ù Å½»ö! (Ä«ÆêÀÌµç ¼øÂûÀÌµç)
+        FindTarget();
+
+        // ¼Ò¸® ÀÌµ¿
+        if (isMovingToCarpet)
         {
-            RandomPatrol();
-            FindTarget();
+            navMeshAgent.SetDestination(targetCarpetPos);
+
+            float dist = Vector3.Distance(transform.position, targetCarpetPos);
+            if (dist <= carpetArriveThreshold)
+            {
+                print("Ä«Æê±îÁöÀÌµ¿²ý");
+                isMovingToCarpet = false;
+                RandomPatrol();
+            }
+            // return ºÙ¿©µµ ¹«¹æ
+            return;
         }
+
+        // ±âº» ¼øÂû
+        RandomPatrol();
     }
 
     //private IEnumerator RandomPatrol()
@@ -74,6 +157,15 @@ public class MonsterCtrl : MonoBehaviour
     //    navMeshAgent.SetDestination(patrolTargetPosition);
     //    yield return new WaitForSeconds(5f);
     //}
+
+    public void HeardSound(Vector3 inputCarpetPos)
+    {
+        // ¼Ò¸® ÀÌµ¿ »óÅÂ ÁøÀÔ
+        isMovingToCarpet = true;
+        //hasSubTarget = true;        // Patrol µî Á¶°Ç¹®¿¡¼­ »ç¿ë
+        targetCarpetPos = inputCarpetPos;
+        navMeshAgent.SetDestination(targetCarpetPos);
+    }
 
     private void RandomPatrol()
     {
