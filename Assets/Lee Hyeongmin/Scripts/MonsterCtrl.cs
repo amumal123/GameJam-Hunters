@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,13 +20,14 @@ public class MonsterCtrl : MonoBehaviour
     public float traceSpeed;
     public float patrolSpeed;
     public float viewDistance;
+    public float viewAngle;
 
     private NavMeshAgent navMeshAgent;
     private bool hasTarget;
     private float lostTraceTime = 0;
 
-    private float patrolDelay = 5f; // 순찰중일때 5초까지만 그 위치로 이동
-    private float patrolTimer = 0f;
+    private float patrolDelay = 3f; // 순찰중일때 5초까지만 그 위치로 이동
+    private float patrolTimer = 4.5f;
 
     private void Awake()
     {
@@ -56,12 +58,11 @@ public class MonsterCtrl : MonoBehaviour
             if (lostTraceTime >= 5f)
             {
                 hasTarget = false;
-                navMeshAgent.isStopped = true; // 임시용, 나중에 바꿔야해
+                //navMeshAgent.isStopped = true; // 임시용, 나중에 바꿔야해
             }
         }
         else
         {
-            //StartCoroutine(RandomPatrol());
             RandomPatrol();
             FindTarget();
         }
@@ -89,16 +90,26 @@ public class MonsterCtrl : MonoBehaviour
     {
         print("타겟없음");
         Collider[] colliders = Physics.OverlapSphere(transform.position, viewDistance, whatIsTarget);
+
         foreach (Collider collider in colliders)
         {
-            Vector3 direction = (collider.transform.position - transform.position).normalized;
-            float distance = Vector3.Distance(transform.position, collider.transform.position);
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance))
+            float halfAngleInRadians = (viewAngle * 0.5f) * Mathf.Deg2Rad;
+
+            Vector3 directionVector1 = transform.TransformDirection(Vector3.forward).normalized;
+            Vector3 directionVector2 = (collider.transform.position - transform.position).normalized;
+            float dotProduct = Vector3.Dot(directionVector1, directionVector2);
+
+            if (dotProduct > Mathf.Cos(halfAngleInRadians))
             {
-                var hitLayer = hit.collider.gameObject.layer;
-                if (((1 << hitLayer) & whatIsTarget) != 0)
+                Vector3 direction = (collider.transform.position - transform.position).normalized;
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance))
                 {
-                    hasTarget = true;
+                    var hitLayer = hit.collider.gameObject.layer;
+                    if (((1 << hitLayer) & whatIsTarget) != 0)
+                    {
+                        hasTarget = true;
+                    }
                 }
             }
         }
@@ -152,11 +163,32 @@ public class MonsterCtrl : MonoBehaviour
     }
 
     // 확인용
-    public float radius = 10f;
-    public Color gizmoColor = Color.green;
+    public float gizmoRadius = 10f;
+    public float gizmoDistance = 10f;
+    public float angle = 80f;
+
+    public Color gizmoColor;
     private void OnDrawGizmos()
     {
-        Gizmos.color = gizmoColor;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        // 원 범위 기즈모
+        Gizmos.color = gizmoColor = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, gizmoRadius);
+
+        // 선 기즈모
+        // 시작점
+        Vector3 start = transform.position;
+
+        // 예시 방향(Transform의 정면, 즉 Z+ 방향)
+        float halfAngleInRadius = angle / 2 * Mathf.Deg2Rad;
+
+        Vector3 leftDir = transform.rotation * new Vector3(-Mathf.Sin(halfAngleInRadius), 0f, Mathf.Cos(halfAngleInRadius)).normalized;
+        Vector3 leftVector = start + (leftDir * gizmoDistance);
+        Vector3 rightDir = transform.rotation * new Vector3(Mathf.Sin(halfAngleInRadius), 0f, Mathf.Cos(halfAngleInRadius)).normalized;
+        Vector3 rightVector = start + (rightDir * gizmoDistance);
+
+        // 직선 기즈모 그리기
+        Gizmos.color = gizmoColor = Color.red;
+        Gizmos.DrawLine(start, leftVector);
+        Gizmos.DrawLine(start, rightVector);
     }
 }

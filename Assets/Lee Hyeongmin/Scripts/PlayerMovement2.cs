@@ -5,19 +5,19 @@ public class PlayerMovement2 : MonoBehaviour
 {
     public float playerSpeed = 3f;
     public float playerRotSpeed = 0.25f;
+    public Transform playerEyes;
 
     private CharacterController characterController;
-    private Rigidbody playerRigidbody;
     private PlayerInput playerInput;
     private float pitch = 0f;
     private float yaw = 0f;
+    private float gravity = -9.81f;
+    private Vector3 velocity;
 
     private void Awake()
     {
-        playerRigidbody = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
-
-        
+        characterController = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();        
     }
 
     private void Update()
@@ -28,17 +28,37 @@ public class PlayerMovement2 : MonoBehaviour
 
     private void Move(Vector2 movementInput) // movementInput <- w를 누르면 0,1 a를 누르면 -1,0 s를 누르면 0,-1 d를 누르면 1,0
     {
-        //Vector3 moveDirection = (transform.right * movementInput.x + transform.forward * movementInput.y) * playerSpeed;
-        //// transform.right: 로컬 좌표계에서의 플레이어 x축
-        //// transform.forward: 로컬 좌표계에서의 플레이어 z축
-        //// playerSpeed: 이동속도
+        //// 이동방향: 현재 회전 기준의 월드방향으로 변환
+        //Vector3 move = transform.right * movementInput.x + transform.forward * movementInput.y;
+        //move *= playerSpeed;
 
-        ////moveDirection.y = playerRigidbody.linearVelocity.y; // y축으로는 이동하지 않을 것이기에 고정용
+        //// 점프/중력 보정
+        //if (characterController.isGrounded && velocity.y < 0)
+        //{
+        //    velocity.y = -2f; // 바닥에 붙임
+        //}
 
-        //playerRigidbody.linearVelocity = moveDirection; // .linearVelocity: 값을 넣어주면 그에따라 움직임
+        //velocity.y += gravity * Time.deltaTime;
 
-        Vector3 movementDirection = (Vector3.forward * movementInput.y) + (Vector3.right * movementInput.x);
-        transform.Translate(movementDirection.normalized * Time.deltaTime * playerSpeed, Space.Self);
+        //Vector3 finalVelocity = move + Vector3.up * velocity.y;
+
+        //characterController.Move(finalVelocity * Time.deltaTime);
+
+        // 이동방향: 현재 회전 기준의 월드방향으로 변환
+        Vector3 move = playerEyes.right * movementInput.x + playerEyes.forward * movementInput.y;
+        move *= playerSpeed;
+
+        // 점프/중력 보정
+        if (characterController.isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f; // 바닥에 붙임
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+
+        Vector3 finalVelocity = move + Vector3.up * velocity.y;
+
+        characterController.Move(finalVelocity * Time.deltaTime);
     }
 
     private void Rotate(Vector2 lookInput)
@@ -48,6 +68,7 @@ public class PlayerMovement2 : MonoBehaviour
         pitch -= lookInput.y * playerRotSpeed;
         pitch = Mathf.Clamp(pitch, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+        //transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+        playerEyes.rotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 }
