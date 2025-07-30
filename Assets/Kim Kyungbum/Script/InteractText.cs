@@ -4,20 +4,35 @@ using TMPro;
 public class InteractText : MonoBehaviour
 {
     public TextMeshProUGUI promptText;
+    private ObjDestroy targetDestroyScript;
+
+    void Start()
+    {
+        targetDestroyScript = GetComponent<ObjDestroy>();
+    }
+    void Update()
+    {
+        if (promptText.color.a != 0)
+        {
+            Debug.Log(promptText.color.a);
+            targetDestroyScript.destroyObject();
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("µÈæÓø»");
-            promptText.text = "Open Door (E)";
+            Debug.Log("ÏºúÏßê");
+            promptText.color = new Color32(255, 255, 255, 255);
         }
     }
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("≥™∞®");
-            promptText.text = "";
+            Debug.Log("Í∫ºÏßê");
+            promptText.color = new Color32(255, 255, 255, 0);
         }
     }
 }

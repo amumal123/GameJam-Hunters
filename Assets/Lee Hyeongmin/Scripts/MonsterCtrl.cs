@@ -26,7 +26,7 @@ public class MonsterCtrl : MonoBehaviour
     private bool hasTarget;
     private float lostTraceTime = 0;
 
-    private float patrolDelay = 3f; // ¼øÂûÁßÀÏ¶§ 5ÃÊ±îÁö¸¸ ±× À§Ä¡·Î ÀÌµ¿
+    private float patrolDelay = 3f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½ 5ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
     private float patrolTimer = 4.5f;
 
     private void Awake()
@@ -41,7 +41,6 @@ public class MonsterCtrl : MonoBehaviour
     {
         if (hasTarget)
         {
-            print("Å¸°ÙÀÖÀ½");
             navMeshAgent.SetDestination(target.position);
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
@@ -58,7 +57,7 @@ public class MonsterCtrl : MonoBehaviour
             if (lostTraceTime >= 5f)
             {
                 hasTarget = false;
-                //navMeshAgent.isStopped = true; // ÀÓ½Ã¿ë, ³ªÁß¿¡ ¹Ù²ã¾ßÇØ
+                //navMeshAgent.isStopped = true; // ï¿½Ó½Ã¿ï¿½, ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ï¿½
             }
         }
         else
@@ -70,7 +69,7 @@ public class MonsterCtrl : MonoBehaviour
 
     //private IEnumerator RandomPatrol()
     //{
-    //    print("ÄÚ·çÆ¾ ¹ß»ý");
+    //    print("ï¿½Ú·ï¿½Æ¾ ï¿½ß»ï¿½");
     //    Vector3 patrolTargetPosition = GetRandomPointOnNavMesh(transform.position, 10f, NavMesh.AllAreas);
     //    navMeshAgent.SetDestination(patrolTargetPosition);
     //    yield return new WaitForSeconds(5f);
@@ -88,7 +87,6 @@ public class MonsterCtrl : MonoBehaviour
 
     private void FindTarget()
     {
-        print("Å¸°Ù¾øÀ½");
         Collider[] colliders = Physics.OverlapSphere(transform.position, viewDistance, whatIsTarget);
 
         foreach (Collider collider in colliders)
@@ -123,13 +121,13 @@ public class MonsterCtrl : MonoBehaviour
 
     //        if (hasTarget)
     //        {
-    //            print("Å¸°ÙÀ» °¡Áö°í ÀÖÀ½");
+    //            print("Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
     //            navMeshAgent.SetDestination(target.position);
     //        }
-    //        else // Å¸°ÙÀ» Ã£Áö ¸øÇÑ »óÅÂ¶ó¸é
+    //        else // Å¸ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½
     //        {
-    //            print("Å¸°Ù¾øÀ½");
+    //            print("Å¸ï¿½Ù¾ï¿½ï¿½ï¿½");
     //            Collider[] colliders = Physics.OverlapSphere(transform.position, viewDistance, whatIsTarget);
     //            foreach (Collider collider in colliders)
     //            {
@@ -149,20 +147,20 @@ public class MonsterCtrl : MonoBehaviour
     //}
 
 
-    public Vector3 GetRandomPointOnNavMesh(Vector3 center, float distance, int areaMask) // (ÇöÀç À§Ä¡, ¹Ý°æ(°Å¸®), ÇØ´çµÇ´Â NevMesh)
+    public Vector3 GetRandomPointOnNavMesh(Vector3 center, float distance, int areaMask) // (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, ï¿½Ý°ï¿½(ï¿½Å¸ï¿½), ï¿½Ø´ï¿½Ç´ï¿½ NevMesh)
     {
-        // ±âÁØÁ¡°ú ¹Ý°æÀ» ±âÁØÀ¸·Î ÇØ´çµÇ´Â NavMesh À§¿¡ ·£´ýÇÑ À§Ä¡¸¦ ¹ÝÈ¯ÇØÁÜ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½Ç´ï¿½ NavMesh ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½
 
-        var randomPos = Random.insideUnitSphere * distance + center;    // center¸¦ ±âÁØÀ¸·Î ¹ÝÁö¸§ÀÌ distanceÀÎ ±¸ ¾È¿¡¼­ ¾î´À ÇÑ À§Ä¡
+        var randomPos = Random.insideUnitSphere * distance + center;    // centerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ distanceï¿½ï¿½ ï¿½ï¿½ ï¿½È¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡
 
         NavMeshHit hit;
 
-        NavMesh.SamplePosition(randomPos, out hit, distance, areaMask); // (±âÁØ À§Ä¡, out°á°úÁ¤º¸, ¹Ý°æ(°Å¸®), ¿¡¸®¾î¸¶½ºÅ©)  // ¿¡¸®¾î¸¶½ºÅ©¿¡ ÇØ´çÇÏ´Â NavMesh Áß¿¡ ±âÁØ À§Ä¡¿¡¼­ °Å¸® ±îÁöÀÇ ¹Ý°æ ³»¿¡¼­ ±âÁØ À§Ä¡¿¡ °¡Àå °¡±î¿î Á¡ ÇÏ³ª¸¦ hit¿¡ ´ãÀ½
+        NavMesh.SamplePosition(randomPos, out hit, distance, areaMask); // (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, outï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ý°ï¿½(ï¿½Å¸ï¿½), ï¿½ï¿½ï¿½ï¿½ï¿½î¸¶ï¿½ï¿½Å©)  // ï¿½ï¿½ï¿½ï¿½ï¿½î¸¶ï¿½ï¿½Å©ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ NavMesh ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ hitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         return hit.position;
     }
 
-    // È®ÀÎ¿ë
+    // È®ï¿½Î¿ï¿½
     public float gizmoRadius = 10f;
     public float gizmoDistance = 10f;
     public float angle = 80f;
@@ -170,15 +168,15 @@ public class MonsterCtrl : MonoBehaviour
     public Color gizmoColor;
     private void OnDrawGizmos()
     {
-        // ¿ø ¹üÀ§ ±âÁî¸ð
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         Gizmos.color = gizmoColor = Color.blue;
         Gizmos.DrawWireSphere(transform.position, gizmoRadius);
 
-        // ¼± ±âÁî¸ð
-        // ½ÃÀÛÁ¡
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector3 start = transform.position;
 
-        // ¿¹½Ã ¹æÇâ(TransformÀÇ Á¤¸é, Áï Z+ ¹æÇâ)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Transformï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ Z+ ï¿½ï¿½ï¿½ï¿½)
         float halfAngleInRadius = angle / 2 * Mathf.Deg2Rad;
 
         Vector3 leftDir = transform.rotation * new Vector3(-Mathf.Sin(halfAngleInRadius), 0f, Mathf.Cos(halfAngleInRadius)).normalized;
@@ -186,7 +184,7 @@ public class MonsterCtrl : MonoBehaviour
         Vector3 rightDir = transform.rotation * new Vector3(Mathf.Sin(halfAngleInRadius), 0f, Mathf.Cos(halfAngleInRadius)).normalized;
         Vector3 rightVector = start + (rightDir * gizmoDistance);
 
-        // Á÷¼± ±âÁî¸ð ±×¸®±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
         Gizmos.color = gizmoColor = Color.red;
         Gizmos.DrawLine(start, leftVector);
         Gizmos.DrawLine(start, rightVector);
